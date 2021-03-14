@@ -1,65 +1,82 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+
+import Header from '../components/layout/Header'
+import Player from '../components/layout/Player'
+import SongItem from '../components/list/SongItem'
 
 export default function Home() {
+
+  const [songs, setSongs] = useState([])
+  const [currSong, setCurrSong] = useState(-1)
+  const [isPlay, setIsPlay] = useState(false)
+
+  useEffect(() => {
+    setIsPlay(true)
+  }, [currSong])
+
+  function onPlay(index) {
+    if (currSong == index) {
+      setIsPlay(!isPlay)
+    }
+    else
+      setCurrSong(index)
+  }
+
+  async function loadData() {
+    const response = await axios.get('/api/featured_tracks/top/all-music', {
+      params: {
+        'client_id': 'v0C9kDEyULvWF0Ggb1vMnimjMDxtYX4B',
+        'limit': 12,
+      },
+    })
+    setSongs(response.data.collection)
+    console.log(response.data.collection)
+  }
+
+  useEffect(() => {
+    loadData()
+  }, [])
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+    <>
+      <Header />
+      <div style={styles.background}>
+        <div style={styles.container}>
+          <div style={styles.content}>
+            <h3>Top 10 Trening Song in SoundCloud</h3>
+            {songs.map((song, index) => (
+              <SongItem
+                key={song.id}
+                song={song}
+                isPlay={index == currSong && isPlay}
+                onPlay={() => onPlay(index)}
+              />
+            ))}
+          </div>
+          <Player
+            song={songs[currSong]}
+            onChange={isPlay => {
+              setIsPlay(isPlay)
+            }}
+            isPlay={isPlay} />
         </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
+      </div>
+    </>
   )
+}
+
+const styles = {
+  background: {
+    background: '#f2f2f2',
+    padding: '0 12px',
+  },
+  container: {
+    width: '100%',
+    background: '#ffffff',
+  },
+  content: {
+    padding: '76px 30px 30px',
+    marginRight: '360px',
+  }
 }
