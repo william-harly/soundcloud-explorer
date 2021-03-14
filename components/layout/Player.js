@@ -65,24 +65,23 @@ export default function Player({song, isPlay, onChange}) {
         scrolling="no"
         frameBorder="no"
         allow="autoplay"
-        src={'https://w.soundcloud.com/player/?url=' + song?.uri +
-          '&amp;auto_play=true&hide_related=true&show_comments=false' +
-          '&show_user=true&show_artwork=true&show_reposts=false&' +
-          'buying=false&download=false'} />
+        src={'https://w.soundcloud.com/player/?url='} />
+      <div style={styles.footer}>
+        Created by William Harly (2101664523)
+      </div>
     </div>
   )
 }
   
 const styles = {
   container: {
-    position: 'fixed',
+    position: 'sticky',
     display: 'flex',
     flexDirection: 'column',
     width: '360px',
     padding: '30px 30px',
     top: '46px',
     right: '12px',
-    borderLeft: '1px solid #f5f5f5',
     background: '#ffffff',
   },
   artworkContainer: {
@@ -96,5 +95,8 @@ const styles = {
     width: '100%',
     height: '100%',
     top: 0,
+  },
+  footer: {
+    marginTop: '12px',
   }
 }
