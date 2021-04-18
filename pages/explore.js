@@ -32,7 +32,7 @@ export default function Home() {
       ? '/api/search/tracks'
       : '/api/featured_tracks/top/all-music', {
         params: {
-          'client_id': 'v0C9kDEyULvWF0Ggb1vMnimjMDxtYX4B',
+          'client_id': 'VaYRlPgqi3Ik2ZDUH242iU7FlmJmAdf4',
           'q': search,
           'limit': 10,
           'offset': 10 * page,
